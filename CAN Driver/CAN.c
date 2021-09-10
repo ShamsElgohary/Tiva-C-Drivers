@@ -411,8 +411,6 @@ void CAN_Transmit(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageCon
 
     /* SET WRITE DATA  AND SET DATAA AND DATAB TO TRANSFER DATA BYTES TO IF REGISTERS */
     *CAN_IF1MSK1_R |= CAN_IF1CMSK_WRNRD | CAN_IF1CMSK_DATAA | CAN_IF1CMSK_DATAB;
-    /* SET THE CONTROL AND ARB BITS TO SEND CONTROL AND ARB BITS IN THE MESSAGE */
-    *CAN_IF1CMSK_R |= CAN_IF1CMSK_MASK | CAN_IF1CMSK_CONTROL | CAN_IF1CMSK_ARB;
 
     /* TRANSFER OF DATA BYTES */
     *CAN_IF1DA1_R |=  DataByte[0];
@@ -490,8 +488,8 @@ void Can_RxConfig( CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageCo
     *CAN_IF1MCTL_R = 0;
     *CAN_IF1CRQ_R  = 0;
 
-    /* CLEAR WRNRD BIT TO SIGNAL A READ OPERATION */
-    *CAN_IF1CMSK_R &= ~CAN_IF1CMSK_WRNRD;
+    /* SET WRNRD BIT TO SIGNAL A WRITE OPERATION IN THE CANIFnCMASK REGISTER */
+    *CAN_IF1CMSK_R |= CAN_IF1CMSK_WRNRD;
     /* ENABLE MASK FOR THE ACCEPTED MESSAGES (MESSAGE FILTERTING MASKS) */
     /* SET THE CONTROL AND ARB BITS TO SEND CONTROL AND ARB BITS IN THE MESSAGE */
     *CAN_IF1CMSK_R |= CAN_IF1CMSK_MASK | CAN_IF1CMSK_CONTROL | CAN_IF1CMSK_ARB;
@@ -614,11 +612,9 @@ void CAN_Receive(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConf
     *CAN_IF1CRQ_R  = 0;
 
 
-    /* CLEAR WRNRD AND SET DATAA AND DATAB TO TRANSFER DATA BYTES TO IF REGISTERS */
+    /* SET DATAA AND DATAB TO TRANSFER DATA BYTES TO IF REGISTERS */
     *CAN_IF1MSK1_R |=   CAN_IF1CMSK_DATAA | CAN_IF1CMSK_DATAB ;
-    *CAN_IF1MSK1_R &= ~ CAN_IF1CMSK_WRNRD;
-    /* SET THE CONTROL AND ARB BITS TO SEND CONTROL AND ARB BITS IN THE MESSAGE */
-    *CAN_IF1CMSK_R |= CAN_IF1CMSK_MASK | CAN_IF1CMSK_CONTROL | CAN_IF1CMSK_ARB;
+
 
     /* Selects one of the 32 message objects in the message RAM to read from */
     *CAN_IF1CRQ_R |= (MessageConfig->MsgObjID & CAN_IF1CRQ_MNUM_M);
@@ -690,13 +686,13 @@ void CAN_Receive(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConf
 
 
 /************************************************************************************
-* Service Name: CAN_SetMode
+* Service Name: CAN_SetTestMode
 * Sync/Async: Synchronous
 * Reentrancy: Non reentrant
 * Return value: None
 * Description: Function to configure mode of the CAN.
 ************************************************************************************/
-void CAN_SetMode(CAN_InstanceID InstanceID, ModeConfig Mode)
+void CAN_SetTestMode(CAN_InstanceID InstanceID, ModeConfig Mode)
 {
     volatile uint32 *CAN_CTL_R = NULL_PTR;
     volatile uint32 *CAN_TST_R = NULL_PTR;
@@ -771,7 +767,7 @@ void CAN_SetMode(CAN_InstanceID InstanceID, ModeConfig Mode)
 ************************************************************************************/
 void CAN0_Handler(void)
 {
-    /* CALL BACK FN. */
+
 
 }
 
@@ -780,6 +776,6 @@ void CAN0_Handler(void)
 
 void CAN1_Handler(void)
 {
-    /* CALL BACK FN. */
+
 
 }

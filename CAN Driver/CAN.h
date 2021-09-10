@@ -202,7 +202,7 @@ void Can_RxConfig( CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageCo
 
 void CAN_Receive(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, uint8 *DataByte);
 
-void CAN_SetMode(CAN_InstanceID InstanceID, ModeConfig Mode);
+void CAN_SetTestMode(CAN_InstanceID InstanceID, ModeConfig Mode);
 
 
 
