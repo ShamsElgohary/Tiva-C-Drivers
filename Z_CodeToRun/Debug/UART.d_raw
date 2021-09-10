@@ -1,0 +1,6 @@
+UART.obj: ../UART.c
+UART.obj: ..\UART.h
+UART.obj: ..\GPIO_private.h
+UART.obj: ..\Std_Types.h
+UART.obj: ..\UART_private.h
+UART.obj: ..\common_macros.h

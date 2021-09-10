@@ -1,0 +1,7 @@
+SSI.obj: ../SSI.c
+SSI.obj: ..\SSI.h
+SSI.obj: ..\GPIO_Port.h
+SSI.obj: ..\GPIO_private.h
+SSI.obj: ..\Std_Types.h
+SSI.obj: ..\common_macros.h
+SSI.obj: ..\SSI_private.h

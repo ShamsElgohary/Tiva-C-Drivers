@@ -1,0 +1,283 @@
+******************************************************************************
+                  TI ARM Linker PC v20.2.4                     
+******************************************************************************
+>> Linked Fri Sep 10 17:24:04 2021
+
+OUTPUT FILE NAME:   <PC_UART.out>
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00001779
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  FLASH                 00000000   00040000  0000186e  0003e792  R  X
+  SRAM                  20000000   00008000  00000240  00007dc0  RW X
+
+
+SEGMENT ALLOCATION MAP
+
+run origin  load origin   length   init length attrs members
+----------  ----------- ---------- ----------- ----- -------
+00000000    00000000    00001870   00001870    r-x
+  00000000    00000000    0000026c   0000026c    r-- .intvecs
+  0000026c    0000026c    000015a6   000015a6    r-x .text
+  00001812    00001812    0000000c   0000000c    r-- .const
+  00001820    00001820    00000050   00000050    r-- .cinit
+20000000    20000000    00000240   00000000    rw-
+  20000000    20000000    00000200   00000000    rw- .stack
+  20000200    20000200    0000003c   00000000    rw- .data
+  2000023c    2000023c    00000004   00000000    rw- .bss
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.intvecs   0    00000000    0000026c     
+                  00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
+
+.text      0    0000026c    000015a6     
+                  0000026c    00000d24     CAN.obj (.text)
+                  00000f90    00000270     I2C.obj (.text)
+                  00001200    0000019c     SSI.obj (.text)
+                  0000139c    00000188     GPIO_Port.obj (.text)
+                  00001524    0000010c     UART.obj (.text)
+                  00001630    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
+                  000016cc    00000068                                   : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  00001734    00000044                                   : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  00001778    00000034                                   : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
+                  000017ac    00000028     main.obj (.text)
+                  000017d4    0000001c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
+                  000017f0    0000000e                                   : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  000017fe    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  0000180a    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
+                  0000180e    00000004                                   : exit.c.obj (.text:abort:abort)
+
+.const     0    00001812    0000000c     
+                  00001812    00000009     SSI_PBCfg.obj (.const:SSI_Configuration)
+                  0000181b    00000003     I2C_PBCfg.obj (.const:I2C_Configuration)
+
+.cinit     0    00001820    00000050     
+                  00001820    0000002a     (.cinit..data.load) [load image, compression = lzss]
+                  0000184a    00000002     --HOLE-- [fill = 0]
+                  0000184c    0000000c     (__TI_handler_table)
+                  00001858    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00001860    00000010     (__TI_cinit_table)
+
+.init_array 
+*          0    00000000    00000000     UNINITIALIZED
+
+.data      0    20000200    0000003c     UNINITIALIZED
+                  20000200    00000010     CAN_PBCfg.obj (.data:GPIO_CAN0)
+                  20000210    00000010     CAN_PBCfg.obj (.data:GPIO_CAN1)
+                  20000220    00000010     SSI_PBCfg.obj (.data:GPIO_SSI0)
+                  20000230    00000008     CAN_PBCfg.obj (.data:CAN_Configuration)
+                  20000238    00000004     SSI.obj (.data)
+
+.bss       0    2000023c    00000004     UNINITIALIZED
+                  2000023c    00000004     UART.obj (.bss)
+
+.stack     0    20000000    00000200     UNINITIALIZED
+                  20000000    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.stack)
+                  20000004    000001fc     --HOLE--
+
+__llvm_prf_cnts 
+*          0    20000000    00000000     UNINITIALIZED
+
+MODULE SUMMARY
+
+       Module                         code   ro data   rw data
+       ------                         ----   -------   -------
+    .\
+       CAN.obj                        3364   0         0      
+       tm4c123gh6pm_startup_ccs.obj   12     620       0      
+       I2C.obj                        624    0         0      
+       SSI.obj                        412    0         4      
+       GPIO_Port.obj                  392    0         0      
+       UART.obj                       268    0         4      
+       CAN_PBCfg.obj                  0      0         40     
+       main.obj                       40     0         0      
+       SSI_PBCfg.obj                  0      9         16     
+       I2C_PBCfg.obj                  0      3         0      
+    +--+------------------------------+------+---------+---------+
+       Total:                         5112   632       64     
+                                                              
+    E:\Computer\Coding Programs\CCS\ccs\tools\compiler\ti-cgt-arm_20.2.4.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
+       memcpy_t2.asm.obj              156    0         0      
+       copy_decompress_lzss.c.obj     104    0         0      
+       autoinit.c.obj                 68     0         0      
+       boot_cortex_m.c.obj            52     0         0      
+       copy_zero_init.c.obj           28     0         0      
+       copy_decompress_none.c.obj     14     0         0      
+       exit.c.obj                     4      0         0      
+       pre_init.c.obj                 4      0         0      
+    +--+------------------------------+------+---------+---------+
+       Total:                         430    0         0      
+                                                              
+       Stack:                         0      0         512    
+       Linker Generated:              0      78        0      
+    +--+------------------------------+------+---------+---------+
+       Grand Total:                   5542   710       576    
+
+
+LINKER GENERATED COPY TABLES
+
+__TI_cinit_table @ 00001860 records: 2, size/record: 8, table size: 16
+	.data: load addr=00001820, load size=0000002a bytes, run addr=20000200, run size=0000003c bytes, compression=lzss
+	.bss: load addr=00001858, load size=00000008 bytes, run addr=2000023c, run size=00000004 bytes, compression=zero_init
+
+
+LINKER GENERATED HANDLER TABLE
+
+__TI_handler_table @ 0000184c records: 3, size/record: 4, table size: 12
+	index: 0, handler: __TI_decompress_lzss
+	index: 1, handler: __TI_decompress_none
+	index: 2, handler: __TI_zero_init
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address   name                          
+-------   ----                          
+0000180f  C$$EXIT                       
+00000f7d  CAN0_Handler                  
+00000f7f  CAN1_Handler                  
+20000230  CAN_Configuration             
+000003c9  CAN_Disable                   
+0000026d  CAN_Init                      
+00000c2d  CAN_Read                      
+00000431  CAN_Resume                    
+0000032b  CAN_SetBaudRate               
+00000eb1  CAN_SetMode                   
+000003fd  CAN_Stop                      
+0000090b  CAN_UpdateData                
+00000a2b  Can_RxConfig                  
+00000481  Can_TxConfig                  
+20000200  GPIO_CAN0                     
+20000210  GPIO_CAN1                     
+0000139d  GPIO_Channel_Init             
+20000220  GPIO_SSI0                     
+00001089  I2C0_ReadByte                 
+00000ff5  I2C0_WriteByte                
+000010d1  I2C1_ReadByte                 
+0000103f  I2C1_WriteByte                
+0000181b  I2C_Configuration             
+00000f91  I2C_Init                      
+000017ff  ResetISR                      
+00001363  SSI0_Recieve                  
+00001347  SSI0_Send                     
+00001812  SSI_Configuration             
+00001201  SSI_Init                      
+00001525  UART0_Handler                 
+00001539  UART0_Init                    
+000015e1  UART0_SetCallBack             
+000015d1  UART0_recieveByte             
+000015b5  UART0_sendByte                
+20000200  __STACK_END                   
+00000200  __STACK_SIZE                  
+20000200  __STACK_TOP                   
+00001860  __TI_CINIT_Base               
+00001870  __TI_CINIT_Limit              
+0000184c  __TI_Handler_Table_Base       
+00001858  __TI_Handler_Table_Limit      
+00001735  __TI_auto_init_nobinit_nopinit
+000016cd  __TI_decompress_lzss          
+000017f1  __TI_decompress_none          
+ffffffff  __TI_pprof_out_hndl           
+ffffffff  __TI_prof_data_size           
+ffffffff  __TI_prof_data_start          
+00000000  __TI_static_base__            
+000017d5  __TI_zero_init_nomemset       
+00001631  __aeabi_memcpy                
+00001631  __aeabi_memcpy4               
+00001631  __aeabi_memcpy8               
+ffffffff  __binit__                     
+ffffffff  __c_args__                    
+UNDEFED   __mpu_init                    
+20000000  __stack                       
+20000000  __start___llvm_prf_cnts       
+20000000  __stop___llvm_prf_cnts        
+00001779  _c_int00_noargs               
+UNDEFED   _system_post_cinit            
+0000180b  _system_pre_init              
+0000180f  abort                         
+ffffffff  binit                         
+00000000  g_pfnVectors                  
+000017ad  main                          
+00001631  memcpy                        
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address   name                          
+-------   ----                          
+00000000  __TI_static_base__            
+00000000  g_pfnVectors                  
+00000200  __STACK_SIZE                  
+0000026d  CAN_Init                      
+0000032b  CAN_SetBaudRate               
+000003c9  CAN_Disable                   
+000003fd  CAN_Stop                      
+00000431  CAN_Resume                    
+00000481  Can_TxConfig                  
+0000090b  CAN_UpdateData                
+00000a2b  Can_RxConfig                  
+00000c2d  CAN_Read                      
+00000eb1  CAN_SetMode                   
+00000f7d  CAN0_Handler                  
+00000f7f  CAN1_Handler                  
+00000f91  I2C_Init                      
+00000ff5  I2C0_WriteByte                
+0000103f  I2C1_WriteByte                
+00001089  I2C0_ReadByte                 
+000010d1  I2C1_ReadByte                 
+00001201  SSI_Init                      
+00001347  SSI0_Send                     
+00001363  SSI0_Recieve                  
+0000139d  GPIO_Channel_Init             
+00001525  UART0_Handler                 
+00001539  UART0_Init                    
+000015b5  UART0_sendByte                
+000015d1  UART0_recieveByte             
+000015e1  UART0_SetCallBack             
+00001631  __aeabi_memcpy                
+00001631  __aeabi_memcpy4               
+00001631  __aeabi_memcpy8               
+00001631  memcpy                        
+000016cd  __TI_decompress_lzss          
+00001735  __TI_auto_init_nobinit_nopinit
+00001779  _c_int00_noargs               
+000017ad  main                          
+000017d5  __TI_zero_init_nomemset       
+000017f1  __TI_decompress_none          
+000017ff  ResetISR                      
+0000180b  _system_pre_init              
+0000180f  C$$EXIT                       
+0000180f  abort                         
+00001812  SSI_Configuration             
+0000181b  I2C_Configuration             
+0000184c  __TI_Handler_Table_Base       
+00001858  __TI_Handler_Table_Limit      
+00001860  __TI_CINIT_Base               
+00001870  __TI_CINIT_Limit              
+20000000  __stack                       
+20000000  __start___llvm_prf_cnts       
+20000000  __stop___llvm_prf_cnts        
+20000200  GPIO_CAN0                     
+20000200  __STACK_END                   
+20000200  __STACK_TOP                   
+20000210  GPIO_CAN1                     
+20000220  GPIO_SSI0                     
+20000230  CAN_Configuration             
+ffffffff  __TI_pprof_out_hndl           
+ffffffff  __TI_prof_data_size           
+ffffffff  __TI_prof_data_start          
+ffffffff  __binit__                     
+ffffffff  __c_args__                    
+ffffffff  binit                         
+UNDEFED   __mpu_init                    
+UNDEFED   _system_post_cinit            
+
+[66 symbols]
