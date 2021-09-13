@@ -196,13 +196,13 @@ void CAN_Resume(CAN_InstanceID InstanceID);
 
 void Can_TxConfig( CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, const uint8 *DataByte );
 
-void CAN_UpdateObject(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, const uint8 *DataByte);
+void CAN_Transmit(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, const uint8 *DataByte);
 
 void Can_RxConfig( CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, uint8 *DataByte);
 
-void CAN_Read(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, uint8 *DataByte);
+void CAN_Receive(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, uint8 *DataByte);
 
-void CAN_SetMode(CAN_InstanceID InstanceID, ModeConfig Mode);
+void CAN_SetTestMode(CAN_InstanceID InstanceID, ModeConfig Mode);
 
 
 

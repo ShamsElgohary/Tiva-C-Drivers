@@ -196,7 +196,7 @@ void CAN_Resume(CAN_InstanceID InstanceID)
 * Sync/Async: Synchronous
 * Reentrancy: Non reentrant
 * Return value: Std_ReturnType
-* Description: Function to configure a message object and write in a message object.
+* Description: Function to configure a message object.
 ************************************************************************************/
 void Can_TxConfig( CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, const uint8 *DataByte )
 {
@@ -353,86 +353,20 @@ void Can_TxConfig( CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageCo
           }
     #endif
 
-    switch( MessageConfig->DLC)
-    {
-
-    case 0x0:
-        /* EMPTY DATA FRAME */
-        break;
-    case 0x1:
-        *CAN_IF1DA1_R |=  DataByte[0];
-        break;
-    case 0x2:
-        *CAN_IF1DA1_R |=  DataByte[0];
-        /* DataByte IS 1 BYTE SO TO SHIFT LEFT BY 8 WE NEED A LARGER DATATYPE
-         * TO AVOID OVERFLOW AND LOSE OF DATA  */
-        *CAN_IF1DA1_R |=  (0x0000 | DataByte[1])<<8;
-        break;
-    case 0x3:
-        *CAN_IF1DA1_R |=  DataByte[0];
-        *CAN_IF1DA1_R |=  (0x0000 | DataByte[1])<<8;
-        *CAN_IF1DA2_R |=  DataByte[2];
-        break;
-    case 0x4:
-        *CAN_IF1DA1_R |=  DataByte[0];
-        *CAN_IF1DA1_R |=  (0x0000 | DataByte[1])<<8;
-        *CAN_IF1DA2_R |=  DataByte[2];
-        *CAN_IF1DA2_R |=  (0x0000 | DataByte[3])<<8;
-        break;
-    case 0x5:
-        *CAN_IF1DA1_R |= DataByte[0];
-        *CAN_IF1DA1_R |= (0x0000 | DataByte[1])<<8;
-        *CAN_IF1DA2_R |= DataByte[2];
-        *CAN_IF1DA2_R |= (0x0000 | DataByte[3])<<8;
-        *CAN_IF1DB1_R |=  DataByte[4];
-        break;
-    case 0x6:
-        *CAN_IF1DA1_R |=  DataByte[0];
-        *CAN_IF1DA1_R |=  (0x0000 | DataByte[1])<<8;
-        *CAN_IF1DA2_R |=  DataByte[2];
-        *CAN_IF1DA2_R |=  (0x0000 | DataByte[3])<<8;
-        *CAN_IF1DB1_R |=  DataByte[4];
-        *CAN_IF1DB1_R |=  (0x0000 | DataByte[5])<<8;
-        break;
-    case 0x7:
-        *CAN_IF1DA1_R |=  DataByte[0];
-        *CAN_IF1DA1_R |=  (0x0000 | DataByte[1])<<8;
-        *CAN_IF1DA2_R |=  DataByte[2];
-        *CAN_IF1DA2_R |=  (0x0000 | DataByte[3])<<8;
-        *CAN_IF1DB1_R |=  DataByte[4];
-        *CAN_IF1DB1_R |=  (0x0000 | DataByte[5])<<8;
-        *CAN_IF1DB2_R |=  DataByte[6];
-        break;
-    case 0x8:
-    default:
-        *CAN_IF1DA1_R |=  DataByte[0];
-        *CAN_IF1DA1_R |=  (0x0000 | DataByte[1])<<8;
-        *CAN_IF1DA2_R |=  DataByte[2];
-        *CAN_IF1DA2_R |=  (0x0000 | DataByte[3])<<8;
-        *CAN_IF1DB1_R |=  DataByte[4];
-        *CAN_IF1DB1_R |=  (0x0000 | DataByte[5])<<8;
-        *CAN_IF1DB2_R |=  DataByte[6];
-        *CAN_IF1DB2_R |=  (0x0000 | DataByte[7])<<8;
-        break;
-    }
-
-    /* Selects one of the 32 message objects in the message RAM for data transfer */
+    /* Selects one of the 32 message objects in the message RAM for the specified configuration */
     *CAN_IF1CRQ_R  |= (MessageConfig->MsgObjID & CAN_IF1CRQ_MNUM_M);
-    /* Transmit Request */
-    *CAN_IF1MCTL_R |= CAN_IF1MCTL_TXRQST;
-
 }
 
 
 
 /************************************************************************************
-* Service Name: CAN_UpdateData
+* Service Name: CAN_Transmit
 * Sync/Async: Synchronous
 * Reentrancy: Non reentrant
 * Return value: None
 * Description: Function to update a specific message object.
 ************************************************************************************/
-void CAN_UpdateData(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, const uint8 *DataByte)
+void CAN_Transmit(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, const uint8 *DataByte)
 {
     volatile uint32 *CAN_IF1MCTL_R  = NULL_PTR;
     volatile uint32 *CAN_IF1DA1_R   = NULL_PTR;
@@ -477,6 +411,7 @@ void CAN_UpdateData(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageC
 
     /* SET WRITE DATA  AND SET DATAA AND DATAB TO TRANSFER DATA BYTES TO IF REGISTERS */
     *CAN_IF1MSK1_R |= CAN_IF1CMSK_WRNRD | CAN_IF1CMSK_DATAA | CAN_IF1CMSK_DATAB;
+
     /* TRANSFER OF DATA BYTES */
     *CAN_IF1DA1_R |=  DataByte[0];
     *CAN_IF1DA1_R |=  (0x0000 | DataByte[1])<<8;
@@ -490,8 +425,11 @@ void CAN_UpdateData(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageC
 
     /* Selects one of the 32 message objects in the message RAM to update for data transfer */
     *CAN_IF1CRQ_R |= (MessageConfig->MsgObjID & CAN_IF1CRQ_MNUM_M);
-    /* Transmit Request and Set NEWDATA to indicate update */
+    /* Transmit Request  */
     *CAN_IF1MCTL_R |= CAN_IF1MCTL_TXRQST | CAN_IF1CMSK_NEWDAT;
+
+    /* Set NEWDATA to indicate update
+      *CAN_IF1MCTL_R |=  CAN_IF1CMSK_NEWDAT; */
 
 }
 
@@ -550,10 +488,11 @@ void Can_RxConfig( CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageCo
     *CAN_IF1MCTL_R = 0;
     *CAN_IF1CRQ_R  = 0;
 
-    /* CLEAR WRNRD BIT TO SIGNAL A READ OPERATION */
-    *CAN_IF1CMSK_R &= ~CAN_IF1CMSK_WRNRD;
+    /* SET WRNRD BIT TO SIGNAL A WRITE OPERATION IN THE CANIFnCMASK REGISTER */
+    *CAN_IF1CMSK_R |= CAN_IF1CMSK_WRNRD;
     /* ENABLE MASK FOR THE ACCEPTED MESSAGES (MESSAGE FILTERTING MASKS) */
-    *CAN_IF1CMSK_R |= CAN_IF1CMSK_MASK ;
+    /* SET THE CONTROL AND ARB BITS TO SEND CONTROL AND ARB BITS IN THE MESSAGE */
+    *CAN_IF1CMSK_R |= CAN_IF1CMSK_MASK | CAN_IF1CMSK_CONTROL | CAN_IF1CMSK_ARB;
     /* CHOOSE DATA BYTES IN MESSAGE OBJECT TO SEND TO REGISTER */
     *CAN_IF1CMSK_R |= CAN_IF1CMSK_DATAB | CAN_IF1CMSK_DATAA;
 
@@ -624,13 +563,13 @@ void Can_RxConfig( CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageCo
 
 
 /************************************************************************************
-* Service Name: CAN_Read
+* Service Name: CAN_Receive
 * Sync/Async: Synchronous
 * Reentrancy: Non reentrant
 * Return value: None
 * Description: Function to read from a message object.
 ************************************************************************************/
-void CAN_Read(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, uint8 *DataByte)
+void CAN_Receive(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig, uint8 *DataByte)
 {
     volatile uint32 *CAN_IF1MCTL_R  = NULL_PTR;
     volatile uint32 *CAN_IF1DA1_R   = NULL_PTR;
@@ -673,9 +612,9 @@ void CAN_Read(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig,
     *CAN_IF1CRQ_R  = 0;
 
 
-    /* CLEAR WRNRD AND SET DATAA AND DATAB TO TRANSFER DATA BYTES TO IF REGISTERS */
+    /* SET DATAA AND DATAB TO TRANSFER DATA BYTES TO IF REGISTERS */
     *CAN_IF1MSK1_R |=   CAN_IF1CMSK_DATAA | CAN_IF1CMSK_DATAB ;
-    *CAN_IF1MSK1_R &= ~ CAN_IF1CMSK_WRNRD;
+
 
     /* Selects one of the 32 message objects in the message RAM to read from */
     *CAN_IF1CRQ_R |= (MessageConfig->MsgObjID & CAN_IF1CRQ_MNUM_M);
@@ -747,13 +686,13 @@ void CAN_Read(CAN_InstanceID InstanceId, const CAN_MessageConfig* MessageConfig,
 
 
 /************************************************************************************
-* Service Name: CAN_SetMode
+* Service Name: CAN_SetTestMode
 * Sync/Async: Synchronous
 * Reentrancy: Non reentrant
 * Return value: None
 * Description: Function to configure mode of the CAN.
 ************************************************************************************/
-void CAN_SetMode(CAN_InstanceID InstanceID, ModeConfig Mode)
+void CAN_SetTestMode(CAN_InstanceID InstanceID, ModeConfig Mode)
 {
     volatile uint32 *CAN_CTL_R = NULL_PTR;
     volatile uint32 *CAN_TST_R = NULL_PTR;
@@ -828,7 +767,7 @@ void CAN_SetMode(CAN_InstanceID InstanceID, ModeConfig Mode)
 ************************************************************************************/
 void CAN0_Handler(void)
 {
-    /* CALL BACK FN. */
+
 
 }
 
@@ -837,6 +776,6 @@ void CAN0_Handler(void)
 
 void CAN1_Handler(void)
 {
-    /* CALL BACK FN. */
+
 
 }
