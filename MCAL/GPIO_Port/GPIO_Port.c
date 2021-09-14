@@ -25,7 +25,7 @@ void GPIO_Channel_Init(ChannelConfig *Config)
 {
     volatile uint32 *BaseAddressPointer = NULL_PTR;
     /* Activate Clock for GPIO PORT */
-    SYSCTL_RCGCGPIO_R |= Config->Port;
+    SYSCTL_RCGCGPIO_R |= (1<<Config->Port);
 
     /* Delay of 3 clock cycles and getting the base address */
     switch(Config->Port)
